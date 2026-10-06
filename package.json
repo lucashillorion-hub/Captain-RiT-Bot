@@ -1,5 +1,5 @@
 {
-  "name": "Captain-RiT-Bot",
+  "name": "captain-rit-bot",
   "version": "1.0.0",
   "main": "bot.js",
   "scripts": {
@@ -8,7 +8,7 @@
   "dependencies": {
     "whatsapp-web.js": "^1.26.0",
     "qrcode-terminal": "^0.12.0",
-    "node-schedule": "^2.1.1"
-    "express": "^4.18.2",
+    "node-schedule": "^2.1.1",
+    "express": "^4.18.2"
   }
 }
