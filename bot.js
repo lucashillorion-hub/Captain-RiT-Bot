@@ -1,6 +1,23 @@
 const express = require('express');
+const QRCode = require('qrcode');
 const app = express();
+
+let dernierQR = null;
+
 app.get('/', (req, res) => res.send('Bot ON'));
+
+app.get('/qr', async (req, res) => {
+    if (!dernierQR) {
+        return res.send('Pas de QR pour le moment (bot déjà connecté, ou en cours de démarrage). Recharge dans quelques secondes.');
+    }
+    const img = await QRCode.toDataURL(dernierQR, { width: 400 });
+    res.send(`<html><body style="text-align:center;font-family:sans-serif">
+        <h3>Scanne avec WhatsApp</h3>
+        <img src="${img}" />
+        <script>setTimeout(() => location.reload(), 15000)</script>
+    </body></html>`);
+});
+
 app.listen(process.env.PORT || 10000);
 
 const { Client, LocalAuth, Poll } = require('whatsapp-web.js');
@@ -28,7 +45,8 @@ const options = ["30 min - 7'30 /km","45 min - 7'30 /km","45 min - 7'00 /km","45
 let jobsPlanifies = false;
 
 client.on('qr', qr => {
-    console.log('Scanne ce QR code avec WhatsApp (Appareils connectés) :');
+    dernierQR = qr;
+    console.log('QR disponible sur /qr');
     qrcode.generate(qr, { small: true });
 });
 
@@ -37,6 +55,7 @@ client.on('auth_failure', msg => console.error('Échec authentification :', msg)
 client.on('disconnected', reason => console.error('Déconnecté :', reason));
 
 client.on('ready', async () => {
+    dernierQR = null;
     console.log('Bot connecté !');
 
     if (!GROUPE_ID) {
