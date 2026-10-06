@@ -1,3 +1,8 @@
+const express = require('express');
+const app = express();
+app.get('/', (req,res) => res.send('Bot Run Club ON'));
+app.listen(process.env.PORT || 10000, () => console.log('Keep-alive ON'));
+
 const { Client, LocalAuth, Poll } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const schedule = require('node-schedule');
